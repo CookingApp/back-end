@@ -22,7 +22,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
 
     private Button register;
-    private EditText editTextName, editTextAge, editTextEmail,editTextPassword;
+    private EditText editTextName, editTextEmail, editTextPassword, editTextPhone;
     private ProgressBar progressBar;
 
     @Override
@@ -36,71 +36,78 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         register.setOnClickListener(this);
 
         editTextName = findViewById(R.id.editTextPersonName);
-        editTextAge = findViewById(R.id.editTextPersonAge);
+
         editTextEmail = findViewById(R.id.editTextPersonEmail);
         editTextPassword = findViewById(R.id.editTextPersonPassword);
+        editTextPhone = findViewById(R.id.editTextPersonPhone);
 
         progressBar = findViewById(R.id.progressBar);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btnRegister:
                 registerUser();
                 break;
         }
     }
 
-    private void registerUser(){
-        String email=editTextEmail.getText().toString().trim();
-        String password=editTextPassword.getText().toString().trim();
-        String name=editTextName.getText().toString().trim();
-        String age=editTextAge.getText().toString().trim();
+    private void registerUser() {
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
 
-        if(name.isEmpty()){
+        String phone = editTextPhone.getText().toString().trim();
+
+        if (name.isEmpty()) {
             editTextName.setError("Name is required!");
             editTextName.requestFocus();
             return;
         }
 
-        if (age.isEmpty()){
-            editTextAge.setError("Age is required!");
-            editTextAge.requestFocus();
-            return;
-        }
 
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             editTextEmail.setError("Email is required!");
             editTextEmail.requestFocus();
             return;
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmail.setError("Please provide a valid email!");
             editTextEmail.requestFocus();
             return;
         }
 
-        if (password.isEmpty()){
+        if (password.isEmpty()) {
             editTextPassword.setError("Password is required!");
             editTextPassword.requestFocus();
             return;
         }
 
-        if (password.length() < 6){
+        if (password.length() < 6) {
             editTextPassword.setError("Min password length is 6 characters!");
             editTextPassword.requestFocus();
             return;
         }
 
+        if (phone.isEmpty()) {
+            editTextPhone.setError("Phone is required!");
+            editTextPhone.requestFocus();
+        }
+
+        if (phone.length() < 8) {
+            editTextPhone.setError("This is not a valid phone number!");
+            editTextPhone.requestFocus();
+        }
+
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email,password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            User user = new User(name,age,email);
+                        if (task.isSuccessful()) {
+                            User user = new User(name, phone, email);
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -108,19 +115,19 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 
-                                            if (task.isSuccessful()){
-                                                Toast.makeText(RegisterUser.this,"User has been registered successfully!",Toast.LENGTH_LONG).show();
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(RegisterUser.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
 
                                                 //redirect to login layout!
-                                            }else {
-                                                Toast.makeText(RegisterUser.this,"Failed to register! Try again!",Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(RegisterUser.this, "Failed to register! Try again!", Toast.LENGTH_LONG).show();
                                                 progressBar.setVisibility(View.GONE);
                                             }
                                         }
                                     });
-                        }else {
-                            Toast.makeText(RegisterUser.this,"Failed to register! Try again!",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RegisterUser.this, "Failed to register! Try again!", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

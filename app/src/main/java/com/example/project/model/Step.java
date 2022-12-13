@@ -1,10 +1,13 @@
 package com.example.project.model;
 
-public class Step {
+import java.io.Serializable;
+
+public class Step implements Serializable {
 
     private String description;
 
-    public Step(){ }
+    public Step() {
+    }
 
     public Step(String description) {
         this.description = description;
@@ -17,4 +20,5 @@ public class Step {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

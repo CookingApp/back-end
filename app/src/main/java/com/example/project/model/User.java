@@ -2,13 +2,14 @@ package com.example.project.model;
 
 public class User {
 
-    public String name,age,email;
+    public String name, phone, email;
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String name,String age,String email){
-        this.name=name;
-        this.age=age;
-        this.email=email;
+    public User(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
     }
 }

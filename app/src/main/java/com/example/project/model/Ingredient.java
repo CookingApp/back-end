@@ -1,14 +1,16 @@
 package com.example.project.model;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
     private String ingredient;
-    private double quantity;
+    private String quantity;
     private String measure;
 
     public Ingredient() {
     }
 
-    public Ingredient(String ingredient, double quantity, String measure) {
+    public Ingredient(String ingredient, String quantity, String measure) {
         this.ingredient = ingredient;
         this.quantity = quantity;
         this.measure = measure;
@@ -22,11 +24,11 @@ public class Ingredient {
         this.ingredient = ingredient;
     }
 
-    public double getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
